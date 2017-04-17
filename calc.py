@@ -1,14 +1,14 @@
 print('Input first number:')
-a = input()
+a = int(input())
 
-if isinstance(int(a), str) == True:
+if isinstance(a, str) == True:
     print('Not a number')
     exit()
     
 print('Input second number:')
-b = input()
+b = int(input())
 
-if isinstance(int(b), str)==True:
+if isinstance(b, str)==True:
         print('Not a number')
         exit()
         
@@ -40,6 +40,6 @@ elif c == '^':
     print(z)
     quit()
    
-if c != '+, -, *, /, ^':
+else:
     print('Not an operation')
     quit()
