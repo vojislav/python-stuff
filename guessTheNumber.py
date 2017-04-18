@@ -3,7 +3,7 @@ import random
 secretNumber = random.randint(1, 20)
 print('Im thinking of a number between 1 and 20')
 
-for guessesTaken in range(1, 7):
+for guessesTaken in range(1, 20):
     print('Make a guess')
     guess = int(input())
     
