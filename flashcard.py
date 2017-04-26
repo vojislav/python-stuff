@@ -54,6 +54,7 @@ def questionTime():
 		questionTime()
 		
 	else:
+		print('Goodbye!')
 		quit()
 			
 def start():
@@ -66,6 +67,7 @@ def start():
 	if start == '/start':
 		adding()
 	elif start == '/exit':
+		print('Goodbye!')
 		quit()
 	else:
 		start()
