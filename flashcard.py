@@ -10,7 +10,7 @@ def adding():
 	global num
 	num = 0
 	for i in range(3):
-		print ('('+str(num)+') Enter question')
+		print ('('+str(num)+') Enter your question')
 		que = input()
 		question.append(que)
 		
