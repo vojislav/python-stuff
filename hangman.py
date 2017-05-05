@@ -1,21 +1,27 @@
 import random
 
-words = ['plant', 'human', 'candy', 'dog', 'cat', 'string', 'death']
+words = [#'plant', 'human', 'candy', 'dog', 'cat', 'string', 'death',
+    'coconut']
 num = 0
 
-'Welcome to Hangman'.center(20, '-')
+print('Welcome to Hangman'.center(30, '-'))
 rand = random.randint(0, len(words) - 1)
 word = words[rand]
-hidWord = '_' * len(word)
+hidWord = '-' * len(word)
 print(hidWord)
 
-for i in range(len(word)):
-    print('Guess a letter or the whole word')
-    letter = input()
-    if len(letter) == 1:
-        if i == letter:
-            hidWord[i] = word[i]
-            num += 1
+for i in range(10):
+    if '-' not in hidWord:
+        print('Congratz! You got it!')
+        quit()
+    else:
+        print('Guess a letter or the whole word')
+        letter = input()
+        if str(letter) in word:
+            letterIndex = word.index(letter)
+            hidWord = list(hidWord)
+            hidWord[letterIndex] = letter
+            hidWord = "".join(hidWord)
+            print(hidWord)
         else:
-            print('Wrong')
-            continue
+            print('Wrong!')
