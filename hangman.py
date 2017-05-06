@@ -1,12 +1,20 @@
 import random
 import re
 
-words = ['plant', 'human', 'candy', 'dog', 'cat', 'string', 'death', 'coconut']
+words = ['plant', 'human', 'candy', 'dog', 'cat', 'string', 'death', 'coconut',
+    'vacuum cleaner', 'ice cream']
 
 print('Welcome to Hangman'.center(30, '-'))
 rand = random.randint(0, len(words) - 1)
 word = words[rand]
-hidWord = '-' * len(word)
+if ' ' in word:
+    space = word.index(' ')
+    hidWord = list(word)
+    firstPart = hidWord[:space]
+    secondPart = hidWord[space:]
+    hidWord = '-' * len(firstPart) + ' ' + '-' * (len(secondPart) - 1)
+else:
+    hidWord = '-' * len(word)
 print(hidWord)
 
 def checkLetter(letterIndex):
@@ -15,7 +23,6 @@ def checkLetter(letterIndex):
     hidWord = list(hidWord)
     hidWord[letterIndex] = letter
     hidWord = "".join(hidWord)
-    print(hidWord)
 
 for i in range(10):
     if '-' not in hidWord:
@@ -25,8 +32,13 @@ for i in range(10):
         print('Guess a letter or the whole word')
         letter = input()
         charIndexes = ([m.start() for m in re.finditer(letter, word)])
+        if letter == word:
+             print('Congratz! You got it!')
+             quit()
         if str(letter) in word:
             for i in charIndexes:
                 checkLetter(i)
+            print(hidWord)
         else:
             print('Wrong!')
+print(word)
