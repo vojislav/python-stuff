@@ -30,7 +30,8 @@ for i in range(10): # loops 10 times
     else:
         print('Guess a letter or the whole word')
         letter = input()
-        charIndexes = ([m.start() for m in re.finditer(letter, word)]) # I legit dunno how this works (looks for indexes of all instances of letter in word and places them in list charIndexes)
+        charIndexes = ([m.start() for m in re.finditer(letter, word)]) # I legit dunno how this works 
+                                                                       #(looks for indexes of all instances of letter in word and places them in list charIndexes)
         if letter == word: # checking if whole word guessed
              print('Congratz! You got it!')
              quit()
