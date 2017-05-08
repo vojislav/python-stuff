@@ -9,6 +9,9 @@ print('Welcome to Hangman'.center(30, '-'))
 def start():
     global hidWord
     global word
+    global turns
+    
+    turns = 0
     rand = random.randint(0, len(words) - 1) # random num for words list index
     word = words[rand] 
     if ' ' in word: # checking the word has a space (if it's a two-part word)
@@ -19,12 +22,12 @@ def start():
                                                                            #(for some reason it kept adding another dash at the end of the secondPart, hence the - 1)
     else:
         hidWord = '-' * len(word) # if not a two-part word
-    print(hidWord)
-
+    
 def game():
     global letter
     
-    print('Guess a letter or the whole word')
+    print(hidWord)
+    print(str(turns) + ' Guess a letter or the whole word (/quit - to quit)')
     letter = input()
     charIndexes = ([m.start() for m in re.finditer(letter, word)]) # I legit dunno how this works 
                                                                    #(looks for indexes of all instances of letter in word and places them in list charIndexes)
@@ -34,9 +37,14 @@ def game():
     elif letter in word: # if letter in word
         for i in charIndexes: # loops for each i in charIndexes
             checkLetter(i) # checkLetter func with parameter i (takes i, an index of a character, and uses it in place of letterIndex in function)
-        print(hidWord)
+        #print(hidWord)
+        
     elif letter == ':':
         print('Wrong!')
+        
+    elif letter == '/quit':
+        quit()
+        
     else:
         print('Wrong!') # if wrong
         
@@ -53,12 +61,17 @@ def again():
         start()
     else:
         quit()
+
 start()
-for i in range(10): # loops 10 times
+
+while turns <= 10: # loops 10 times
     if '-' not in hidWord: # checking if done
         print('Congratz! You got it!')
         again()
     else:
         game()
+    
+    turns += 1
+
 print(word) # if not guessed within 10 turns, prints out word
 again()
