@@ -1,4 +1,4 @@
-print('Enter a number')
+print('Enter a number : ')
 n = int(input())
 a = 1
 
