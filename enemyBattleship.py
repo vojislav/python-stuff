@@ -93,16 +93,14 @@ def enemyShip(length):
             if int(place[1]) + i <= 9:            
                 if enemyBoard[place[0] + str(int(place[1]) + i)] == '_':
                     enemyBoard[place[0] + str(int(place[1]) + i)] = 'o'
-                    enemyPlaces.remove(place[0] + str(int(place[1]) + i))
-                    printBoard(enemyBoard)
+                    if place[0] + str(int(place[1]) + i) in enemyPlaces:
+                        enemyPlaces.remove(place[0] + str(int(place[1]) + i))
                 else:
                    enemyBoard = dict.fromkeys(enemyBoard, '_')
-                   printBoard(enemyBoard)
                    print('END')
                    break
             else:
                 enemyBoard = dict.fromkeys(enemyBoard, '_')
-                printBoard(enemyBoard)
                 print('END')
                 break
                 
@@ -111,16 +109,14 @@ def enemyShip(length):
             if int(place[1]) - i >= 0:
                 if enemyBoard[place[0] + str(int(place[1]) - i)] == '_':
                     enemyBoard[place[0] + str(int(place[1]) - i)] = 'o'
-                    enemyPlaces.remove(place[0] + str(int(place[1]) - i))
-                    printBoard(enemyBoard)
+                    if place[0] + str(int(place[1]) - i) in enemyPlaces:
+                        enemyPlaces.remove(place[0] + str(int(place[1]) - i))
                 else:
                    enemyBoard = dict.fromkeys(enemyBoard, '_')
-                   printBoard(enemyBoard)
                    print('END')
                    break
             else:
                 enemyBoard = dict.fromkeys(enemyBoard, '_')
-                printBoard(enemyBoard)
                 print('END')
                 break
                 
@@ -130,16 +126,14 @@ def enemyShip(length):
             if secLetterIndex >= 0:
                 if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
                     enemyBoard[alphabet[secLetterIndex] + place[1]] = 'o'
-                    enemyPlaces.remove(alphabet[secLetterIndex] + place[1])
-                    printBoard(enemyBoard)
+                    if alphabet[secLetterIndex] + place[1] in enemyPlaces:
+                        enemyPlaces.remove(alphabet[secLetterIndex] + place[1])
                 else:
                     enemyBoard = dict.fromkeys(enemyBoard, '_')
-                    printBoard(enemyBoard)
                     print('END')
                     break
             else:
                 enemyBoard = dict.fromkeys(enemyBoard, '_')
-                printBoard(enemyBoard)
                 print('END')
                 break
                 
@@ -149,16 +143,14 @@ def enemyShip(length):
             if secLetterIndex <= 9:
                 if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
                     enemyBoard[alphabet[secLetterIndex] + place[1]] = 'o'
-                    enemyPlaces.remove(alphabet[secLetterIndex] + place[1])
-                    printBoard(enemyBoard)
+                    if alphabet[secLetterIndex] + place[1] in enemyPlaces:
+                        enemyPlaces.remove(alphabet[secLetterIndex] + place[1])
                 else:
                     enemyBoard = dict.fromkeys(enemyBoard, '_')
-                    printBoard(enemyBoard)
                     print('END')
                     break
             else:
                 enemyBoard = dict.fromkeys(enemyBoard, '_')
-                printBoard(enemyBoard)
                 print('END')
                 break
 
@@ -182,6 +174,7 @@ while len(enemyPlaces) != 83:
 
 printBoard(enemyBoard)
 print(len(enemyPlaces))
+input('Press ENTER to exit')
 
 
     
