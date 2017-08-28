@@ -338,6 +338,7 @@ def playerTurn():
             else:
                 print('MISS!')
                 enemyBoard[playerGuess] = 'x'
+                enemyPlaces.remove(playerGuess)
                 print('ENEMY BOARD')
                 printBoard(enemyBoard)
                 turn = 1
@@ -369,6 +370,7 @@ def enemyTurn():
         else:
             print('THE ENEMY MISSED!')
             Board[enemyGuess] = 'x'
+            places.remove(enemyGuess)
             print('PLAYER BOARD')
             printBoard(Board)
             turn = 0
