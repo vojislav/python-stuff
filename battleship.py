@@ -21,6 +21,31 @@ enemyBoard={'a0':'_','a1':'_','a2':'_','a3':'_','a4':'_','a5':'_', 'a6':'_','a7'
             'i0':'_','i1':'_','i2':'_','i3':'_','i4':'_','i5':'_', 'i6':'_','i7':'_', 'i8':'_','i9':'_',
             'j0':'_','j1':'_','j2':'_','j3':'_','j4':'_','j5':'_', 'j6':'_','j7':'_', 'j8':'_','j9':'_'}
 
+usedPlayerPlaces = []
+usedEnemyPlaces = []
+
+places =   ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9',
+            'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9',
+            'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9',
+            'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9',
+            'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9',
+            'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9',
+            'g0', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+            'h0', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8', 'h9',
+            'i0', 'i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9',
+            'j0', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'j9']
+
+enemyPlaces =  ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9',
+                'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9',
+                'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9',
+                'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9',
+                'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9',
+                'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9',
+                'g0', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+                'h0', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8', 'h9',
+                'i0', 'i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9',
+                'j0', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'j9']
+
 def printBoard(board):
     print('  0 1 2 3 4 5 6 7 8 9')
     print('A'+ ' ' + board['a0'] + ' ' + board['a1'] + ' ' + board['a2'] + ' ' + board['a3'] + ' ' + board['a4'] + ' ' + board['a5'] + ' ' + board['a6'] + ' ' + board['a7'] + ' ' + board['a8']  + ' ' + board['a9'])
@@ -45,15 +70,18 @@ def printBoard(board):
     print('')
 print('Place your ships')
 
+turn = 0
+
 def start(): 
-    ship(5) 
-    ship(4)
-    ship(3)
-    ship(3)
-    ship(2)
+    playerShip(5) 
+    '''playerShip(4)
+    playerShip(3)
+    playerShip(3)
+    playerShip(2)
+    '''
     printBoard(Board)
 
-def ship(length):
+def playerShip(length):
     global Board
     ships = ['Submarine', 'Cruiser']
     random.shuffle(ships)
@@ -72,6 +100,8 @@ def ship(length):
     print('Ship length : ' + str(length))
     print('Pick starting position:')
     place = input()
+    alphabet = 'abcdefghij'
+    letterIndex = alphabet.index(place[0])
     if len(place) < 3:
         print('Pick direction(R, L, U or D)')
         dir = input()
@@ -81,6 +111,7 @@ def ship(length):
                 for i in range(length):
                     if Board[place[0] + str(int(place[1]) + i)] == '_':
                         Board[place[0] + str(int(place[1]) + i)] = 'o'
+                        usedPlayerPlaces.append(place[0] + str(int(place[1]) + i))
                     else:
                         print('NOT OK2')
                         Board = dict.fromkeys(Board, '_')
@@ -88,6 +119,7 @@ def ship(length):
                 
             else:
                 print('NOT OK1')
+                Board = dict.fromkeys(Board, '_')
                 start()
     
         elif dir == 'l':
@@ -96,6 +128,7 @@ def ship(length):
                 for i in range(length):
                     if Board[place[0] + str(int(place[1]) - i)] == '_':
                         Board[place[0] + str(int(place[1]) - i)] = 'o'
+                        usedPlayerPlaces.append(place[0] + str(int(place[1]) - i))
                     else:
                         print('NOT OK2')
                         Board = dict.fromkeys(Board, '_')
@@ -103,81 +136,22 @@ def ship(length):
                 
             else:
                 print('NOT OK1')
+                Board = dict.fromkeys(Board, '_')
                 start()
     
         elif dir == 'u':
             if (place in Board) and (Board[place] == '_'):
                 for i in range(length):
-                    if place[0] == 'a':
-                        letterPos = 0
-                        
-                    if place[0] == 'b':
-                        letterPos = 1
-                        
-                    if place[0] == 'c':
-                        letterPos = 2
-                        
-                    if place[0] == 'd':
-                        letterPos = 3
-                        
-                    if place[0] == 'e':
-                        letterPos = 4
-                        
-                    if place[0] == 'f':
-                        letterPos = 5
-                        
-                    if place[0] == 'g':
-                        letterPos = 6
-                        
-                    if place[0] == 'h':
-                        letterPos = 7
-                        
-                    if place[0] == 'i':
-                        letterPos = 8
-                        
-                    if place[0] == 'j':
-                        letterPos = 9
-                        
-                    if letterPos < length - 1: #or (letterPos > (9 - length) + 1):
-                        print('NOT OK 2')
-                        quit()
-                        
-                    endLetterPos = letterPos - i
-                    
-                    if endLetterPos == 0:
-                        endLetter = 'a'
-                        
-                    if endLetterPos == 1:
-                        endLetter = 'b'
-                        
-                    if endLetterPos == 2:
-                        endLetter = 'c'
-                        
-                    if endLetterPos == 3:
-                        endLetter = 'd'
-                        
-                    if endLetterPos == 4:
-                        endLetter = 'e'
-                        
-                    if endLetterPos == 5:
-                        endLetter = 'f'
-                        
-                    if endLetterPos == 6:
-                        endLetter = 'g'
-                        
-                    if endLetterPos == 7:
-                        endLetter = 'h'
-                        
-                    if endLetterPos == 8:
-                        endLetter = 'i'
-                        
-                    if endLetterPos == 9:
-                        endLetter = 'j'
-                        
-                    if Board[endLetter + place[1]] == '_':
-                        Board[endLetter + place[1]] = 'o'
+                    secLetterIndex = letterIndex - i
+                    if secLetterIndex >= 0:
+                        if Board[alphabet[secLetterIndex] + place[1]] == '_':
+                            Board[alphabet[secLetterIndex] + place[1]] = 'o'
+                            usedPlayerPlaces.append(alphabet[secLetterIndex] + place[1])
+                        else:
+                            print('NOT OK2')
+                            Board = dict.fromkeys(Board, '_')
+                            start()
                     else:
-                        print('NOT OK3')
                         Board = dict.fromkeys(Board, '_')
                         start()
 
@@ -188,80 +162,225 @@ def ship(length):
         elif dir == 'd':
             if (place in Board) and (Board[place] == '_'):
                 for i in range(length):
-                    if place[0] == 'a':
-                        letterPos = 0
-                        
-                    if place[0] == 'b':
-                        letterPos = 1
-                        
-                    if place[0] == 'c':
-                        letterPos = 2
-                        
-                    if place[0] == 'd':
-                        letterPos = 3
-                        
-                    if place[0] == 'e':
-                        letterPos = 4
-                        
-                    if place[0] == 'f':
-                        letterPos = 5
-                        
-                    if place[0] == 'g':
-                        letterPos = 6
-                        
-                    if place[0] == 'h':
-                        letterPos = 7
-                        
-                    if place[0] == 'i':
-                        letterPos = 8
-                        
-                    if place[0] == 'j':
-                        letterPos = 9
-                        
-                    if (letterPos > (9 - length) + 1):
-                        print('NOT OK 2')
-                        quit()
-                        
-                    endLetterPos = letterPos + i
-                    
-                    if endLetterPos == 0:
-                        endLetter = 'a'
-                        
-                    if endLetterPos == 1:
-                        endLetter = 'b'
-                        
-                    if endLetterPos == 2:
-                        endLetter = 'c'
-                        
-                    if endLetterPos == 3:
-                        endLetter = 'd'
-                        
-                    if endLetterPos == 4:
-                        endLetter = 'e'
-                        
-                    if endLetterPos == 5:
-                        endLetter = 'f'
-                        
-                    if endLetterPos == 6:
-                        endLetter = 'g'
-                        
-                    if endLetterPos == 7:
-                        endLetter = 'h'
-                        
-                    if endLetterPos == 8:
-                        endLetter = 'i'
-                        
-                    if endLetterPos == 9:
-                        endLetter = 'j'
-
-                    if Board[endLetter + place[1]] == '_':
-                        Board[endLetter + place[1]] = 'o'
+                    secLetterIndex = letterIndex + i
+                    if secLetterIndex <= 9:
+                        if Board[alphabet[secLetterIndex] + place[1]] == '_':
+                            Board[alphabet[secLetterIndex] + place[1]] = 'o'
+                            usedPlayerPlaces.append(alphabet[secLetterIndex] + place[1])
+                        else:
+                            print('NOT OK2')
+                            Board = dict.fromkeys(Board, '_')
+                            start()
                     else:
-                        print('NOT OK3')
                         Board = dict.fromkeys(Board, '_')
                         start()
-
             else:
                 print('NOT OK1')
+                Board = dict.fromkeys(Board, '_')
                 start()
+
+def enemyBoardMaker(length): 
+    global enemyBoard
+    global emptyPlaces
+    global usedEnemyPlaces
+    alphabet = 'abcdefghij'
+    possibleDirs = []
+    place = random.choice(enemyPlaces)
+    letterIndex = alphabet.index(place[0])
+
+    if int(place[1]) <= 9 - length + 1:
+        for i in range(length):
+            if enemyBoard[place[0] + str(int(place[1]) + i)] == '_':
+                if 'r' not in possibleDirs:
+                    possibleDirs.append('r')
+        
+                if letterIndex >=  length - 1:
+                    secLetterIndex = letterIndex - i
+                    if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
+                        if 'u' not in possibleDirs:
+                            possibleDirs.append('u')
+                    
+                if letterIndex <= 9 - length + 1:
+                    secLetterIndex = letterIndex + i
+                    if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
+                        if 'd' not in possibleDirs:
+                            possibleDirs.append('d')
+            
+    if int(place[1]) >= length - 1:
+        for i in range(length):
+                if enemyBoard[place[0] + str(int(place[1]) - i)] == '_':
+                    if 'l' not in possibleDirs:
+                        possibleDirs.append('l')
+                
+                if letterIndex >=  length - 1:
+                    secLetterIndex = letterIndex - i
+                    if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
+                        if 'u' not in possibleDirs:
+                            possibleDirs.append('u')
+                        
+                if letterIndex <= 9 - length + 1:
+                    secLetterIndex = letterIndex + i
+                    if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
+                        if 'd' not in possibleDirs:
+                            possibleDirs.append('d')
+                            
+    direc = random.choice(possibleDirs)
+    
+    if direc == 'r':
+        for i in range(length):
+            if int(place[1]) + i <= 9:            
+                if enemyBoard[place[0] + str(int(place[1]) + i)] == '_':
+                    enemyBoard[place[0] + str(int(place[1]) + i)] = 'o'
+                    if place[0] + str(int(place[1]) + i) in enemyPlaces:
+                        enemyPlaces.remove(place[0] + str(int(place[1]) + i))
+                        if place[0] + str(int(place[1]) + i) not in usedEnemyPlaces:
+                            usedEnemyPlaces.append(place[0] + str(int(place[1]) + i))
+                else:
+                   enemyBoard = dict.fromkeys(enemyBoard, '_')
+                   break
+            else:
+                enemyBoard = dict.fromkeys(enemyBoard, '_')
+                break
+                
+    elif direc == 'l':
+        for i in range(length):
+            if int(place[1]) - i >= 0:
+                if enemyBoard[place[0] + str(int(place[1]) - i)] == '_':
+                    enemyBoard[place[0] + str(int(place[1]) - i)] = 'o'
+                    if place[0] + str(int(place[1]) - i) in enemyPlaces:
+                        enemyPlaces.remove(place[0] + str(int(place[1]) - i))
+                        if place[0] + str(int(place[1]) - i) not in usedEnemyPlaces:
+                            usedEnemyPlaces.append(place[0] + str(int(place[1]) - i))
+                else:
+                   enemyBoard = dict.fromkeys(enemyBoard, '_')
+                   break
+            else:
+                enemyBoard = dict.fromkeys(enemyBoard, '_')
+                break
+                
+    elif direc == 'u':
+        for i in range(length):
+            secLetterIndex = letterIndex - i
+            if secLetterIndex >= 0:
+                if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
+                    enemyBoard[alphabet[secLetterIndex] + place[1]] = 'o'
+                    if alphabet[secLetterIndex] + place[1] in enemyPlaces:
+                        enemyPlaces.remove(alphabet[secLetterIndex] + place[1])
+                        if alphabet[secLetterIndex] + place[1] not in usedEnemyPlaces:
+                            usedEnemyPlaces.append(alphabet[secLetterIndex] + place[1])
+                else:
+                    enemyBoard = dict.fromkeys(enemyBoard, '_')
+                    break
+            else:
+                enemyBoard = dict.fromkeys(enemyBoard, '_')
+                break
+                
+    elif direc == 'd':
+        for i in range(length):
+            secLetterIndex = letterIndex + i
+            if secLetterIndex <= 9:
+                if enemyBoard[alphabet[secLetterIndex] + place[1]] == '_':
+                    enemyBoard[alphabet[secLetterIndex] + place[1]] = 'o'
+                    if alphabet[secLetterIndex] + place[1] in enemyPlaces:
+                        enemyPlaces.remove(alphabet[secLetterIndex] + place[1])
+                        if alphabet[secLetterIndex] + place[1] not in usedEnemyPlaces:
+                            usedEnemyPlaces.append(alphabet[secLetterIndex] + place[1])
+                else:
+                    enemyBoard = dict.fromkeys(enemyBoard, '_')
+                    break
+            else:
+                enemyBoard = dict.fromkeys(enemyBoard, '_')
+                break
+
+def enemyBoardDrawer():
+    global enemyPlaces
+    global enemyBoard
+    global usedEnemyPlaces
+    
+    while len(usedEnemyPlaces) != 17:
+        enemyBoard = dict.fromkeys(enemyBoard, '_')
+        usedEnemyPlaces = []
+        enemyPlaces =  ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9',
+                        'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9',
+                        'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9',
+                        'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9',
+                        'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9',
+                        'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9',
+                        'g0', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+                        'h0', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8', 'h9',
+                        'i0', 'i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9',
+                        'j0', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'j9']
+        
+        enemyBoardMaker(5)
+        enemyBoardMaker(4)
+        enemyBoardMaker(3)
+        enemyBoardMaker(3)
+        enemyBoardMaker(2)
+        
+    enemyBoard = dict.fromkeys(enemyBoard, '_')
+    print('ENEMY BOARD READY!')
+    print('------------------------------')
+
+def playerTurn():
+    global turn
+    print('ENEMY BOARD')
+    printBoard(enemyBoard)
+    while turn == 0:
+        print('Guess a position:')
+        playerGuess = input()
+        if playerGuess in enemyPlaces:
+            if playerGuess in usedEnemyPlaces:
+                print('HIT!')
+                enemyBoard[playerGuess] = 'X'
+                usedEnemyPlaces.remove(playerGuess)
+                enemyPlaces.remove(playerGuess)
+                print('ENEMY BOARD')
+                printBoard(enemyBoard)
+            else:
+                print('MISS!')
+                enemyBoard[playerGuess] = 'x'
+                print('ENEMY BOARD')
+                printBoard(enemyBoard)
+                turn = 1
+                input('Press ENTER to countinue')
+                
+        else:
+            print('YOU ALREDY GUESSED THAT POSITION')
+            input('Press ENTER to try again')
+            playerTurn()
+            
+        if len(usedEnemyPlaces) == 0:
+            print('YOU WON!')
+            input('Press ENTER to quit')
+            
+def enemyTurn():
+    global turn
+    print('PLAYER BOARD')
+    printBoard(Board)
+    while turn == 1:
+        enemyGuess = random.choice(places)
+        if enemyGuess in usedPlayerPlaces:
+            print('YOU\'VE BEEN HIT!')
+            Board[enemyGuess] = 'X'
+            usedPlayerPlaces.remove(enemyGuess)
+            places.remove(enemyGuess)
+            print('PLAYER BOARD')
+            printBoard(Board)
+            input('Press ENTER to countinue')
+        else:
+            print('THE ENEMY MISSED!')
+            Board[enemyGuess] = 'x'
+            print('PLAYER BOARD')
+            printBoard(Board)
+            turn = 0
+            input('Press ENTER to countinue')
+    
+        if len(usedPlayerPlaces) == 0:
+            print('THE ENEMY WON!')
+            input('Press ENTER to quit')
+        
 start()
+enemyBoardDrawer()
+while len(usedPlayerPlaces) > 0 or len(usedEnemyPlaces) > 0:
+    playerTurn()
+    enemyTurn()
