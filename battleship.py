@@ -1,8 +1,24 @@
 import random
 import os
-from colorama import init, Back, Style
 
-init()
+def install_and_import(package):
+    import importlib
+    try:
+        importlib.import_module(package)
+    except ImportError:
+        import pip
+        pip.main(['install', package])
+        input('''
+              The game needed to install a module to diplay color.
+              Press ENTER to quit, then restart the game.
+              This won\'t happen again.
+              ''')
+        quit()
+    finally:
+        globals()[package] = importlib.import_module(package)
+
+install_and_import('colorama')
+colorama.init()
 
 Board = {'a0':'_','a1':'_','a2':'_','a3':'_','a4':'_','a5':'_', 'a6':'_','a7':'_', 'a8':'_','a9':'_',
          'b0':'_','b1':'_','b2':'_','b3':'_','b4':'_','b5':'_', 'b6':'_','b7':'_', 'b8':'_','b9':'_',
@@ -53,6 +69,7 @@ enemyPlaces =  ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9',
 
 def printBoard(board):
     print('  0 1 2 3 4 5 6 7 8 9')
+    
     print('A'+ ' ' + board['a0'] + ' ' + board['a1'] + ' ' + board['a2'] + ' ' + board['a3'] + ' ' + board['a4'] + ' ' + board['a5'] + ' ' + board['a6'] + ' ' + board['a7'] + ' ' + board['a8']  + ' ' + board['a9'])
     
     print('B'+ ' ' + board['b0'] + ' ' + board['b1'] + ' ' + board['b2'] + ' ' + board['b3'] + ' ' + board['b4'] + ' ' + board['b5'] + ' ' + board['b6'] + ' ' + board['b7'] + ' ' + board['b8']  + ' ' + board['b9'])
@@ -60,24 +77,26 @@ def printBoard(board):
     print('C'+ ' ' + board['c0'] + ' ' + board['c1'] + ' ' + board['c2'] + ' ' + board['c3'] + ' ' + board['c4'] + ' ' + board['c5'] + ' ' + board['c6'] + ' ' + board['c7'] + ' ' + board['c8']  + ' ' + board['c9'])
 
     print('D'+ ' ' + board['d0'] + ' ' + board['d1'] + ' ' + board['d2'] + ' ' + board['d3'] + ' ' + board['d4'] + ' ' + board['d5'] + ' ' + board['d6'] + ' ' + board['d7'] + ' ' + board['d8']  + ' ' + board['d9'])
-    
+
     print('E'+ ' ' + board['e0'] + ' ' + board['e1'] + ' ' + board['e2'] + ' ' + board['e3'] + ' ' + board['e4'] + ' ' + board['e5'] + ' ' + board['e6'] + ' ' + board['e7'] + ' ' + board['e8']  + ' ' + board['e9'])
-    
+
     print('F'+ ' ' + board['f0'] + ' ' + board['f1'] + ' ' + board['f2'] + ' ' + board['f3'] + ' ' + board['f4'] + ' ' + board['f5'] + ' ' + board['f6'] + ' ' + board['f7'] + ' ' + board['f8']  + ' ' + board['f9'])
 
     print('G'+ ' ' + board['g0'] + ' ' + board['g1'] + ' ' + board['g2'] + ' ' + board['g3'] + ' ' + board['g4'] + ' ' + board['g5'] + ' ' + board['g6'] + ' ' + board['g7'] + ' ' + board['g8']  + ' ' + board['g9'])
 
     print('H'+ ' ' + board['h0'] + ' ' + board['h1'] + ' ' + board['h2'] + ' ' + board['h3'] + ' ' + board['h4'] + ' ' + board['h5'] + ' ' + board['h6'] + ' ' + board['h7'] + ' ' + board['h8']  + ' ' + board['h9'])
-    
+
     print('I'+ ' ' + board['i0'] + ' ' + board['i1'] + ' ' + board['i2'] + ' ' + board['i3'] + ' ' + board['i4'] + ' ' + board['i5'] + ' ' + board['i6'] + ' ' + board['i7'] + ' ' + board['i8']  + ' ' + board['i9'])
 
     print('J'+ ' ' + board['j0'] + ' ' + board['j1'] + ' ' + board['j2'] + ' ' + board['j3'] + ' ' + board['j4'] + ' ' + board['j5'] + ' ' + board['j6'] + ' ' + board['j7'] + ' ' + board['j8']  + ' ' + board['j9'])
-    print('')
+    print('\n')
+
 print('Place your ships')
 
 turn = 0
 def clear():
     os.system('cls')
+
 def start(): 
     playerShip(5) 
     '''playerShip(4)
@@ -345,17 +364,22 @@ def enemyBoardDrawer():
 def playerTurn():
     global turn
     while turn == 0:
-        print('----------ENEMY BOARD----------')
-        print('\n')
+        print(Back.RED + '-----ENEMY BOARD-----')
+        print(Style.RESET_ALL)
         printBoard(enemyBoard)
         print('Guess a position:')
         playerGuess = input()
+        if len(playerGuess) == 0:
+            clear()
+            print(Back.RED + 'THATS NOT A POSITION...ITS NOT ANYTHING ACTUALLY')
+            print(Style.RESET_ALL)
+            playerTurn()
         clear()
         if playerGuess in enemyPlaces:
             if playerGuess in usedEnemyPlaces:
                 print(Back.GREEN + 'HIT!')
                 print(Style.RESET_ALL)
-                enemyBoard[playerGuess] = '0'
+                enemyBoard[playerGuess] = (Fore.GREEN + '0')
                 usedEnemyPlaces.remove(playerGuess)
                 enemyPlaces.remove(playerGuess)
                 printBoard(enemyBoard)
@@ -365,7 +389,7 @@ def playerTurn():
             else:
                 print(Back.RED + 'MISS!')
                 print(Style.RESET_ALL)
-                enemyBoard[playerGuess] = 'x'
+                enemyBoard[playerGuess] = (Fore.RED + 'x')
                 enemyPlaces.remove(playerGuess)
                 printBoard(enemyBoard)
                 turn = 1
@@ -373,9 +397,9 @@ def playerTurn():
                 clear()
                 
         else:
+            clear()
             print(Back.RED + 'YOU ALREDY GUESSED THAT POSITION')
             print(Style.RESET_ALL)
-            input('Press ENTER to try again')
             playerTurn()
             
         if len(usedEnemyPlaces) == 0:
@@ -385,12 +409,18 @@ def playerTurn():
             
 def enemyTurn():
     global turn
+    global printBoard
     while turn == 1:
+        print(Back.GREEN + '-----PLAYER BOARD-----')
+        print(Style.RESET_ALL)
+        printBoard(Board)
+        input('Press ENTER to continue')
+        clear()
         enemyGuess = random.choice(places)
         if enemyGuess in usedPlayerPlaces:
             print(Back.RED + 'YOU\'VE BEEN HIT!')
             print(Style.RESET_ALL)
-            Board[enemyGuess] = '0'
+            Board[enemyGuess] = (Fore.RED + '0')
             usedPlayerPlaces.remove(enemyGuess)
             places.remove(enemyGuess)
             printBoard(Board)
@@ -399,7 +429,7 @@ def enemyTurn():
         else:
             print(Back.GREEN + 'THE ENEMY MISSED!')
             print(Style.RESET_ALL)
-            Board[enemyGuess] = 'x'
+            Board[enemyGuess] = (Fore.GREEN + 'x')
             places.remove(enemyGuess)
             printBoard(Board)
             turn = 0
