@@ -1,25 +1,8 @@
 import random
 import os
 
-def install_and_import(package):
-    import importlib
-    try:
-        importlib.import_module(package)
-    except ImportError:
-        import pip
-        pip.main(['install', package])
-        input('''
-              The game needed to install a module to diplay color.
-              Press ENTER to quit, then restart the game.
-              This won\'t happen again.
-              ''')
-        clear()
-    finally:
-        globals()[package] = importlib.import_module(package)
-
-install_and_import('colorama')
-from colorama import Fore, Back, Style
-colorama.init()
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 Board = {'a0':'_','a1':'_','a2':'_','a3':'_','a4':'_','a5':'_', 'a6':'_','a7':'_', 'a8':'_','a9':'_',
          'b0':'_','b1':'_','b2':'_','b3':'_','b4':'_','b5':'_', 'b6':'_','b7':'_', 'b8':'_','b9':'_',
@@ -91,25 +74,26 @@ def printBoard(board):
 
     print('J'+ ' ' + board['j0'] + ' ' + board['j1'] + ' ' + board['j2'] + ' ' + board['j3'] + ' ' + board['j4'] + ' ' + board['j5'] + ' ' + board['j6'] + ' ' + board['j7'] + ' ' + board['j8']  + ' ' + board['j9'])
     print('\n')
-print(Back.BLUE + '-----BATTLESHIP-----')
-print(Style.RESET_ALL)
-print('\n')
+print('-----BATTLESHIP-----')
+input("Press ENTER to start the game.")
+clear()
 print('Place your ships')
 print('\n')
 
 turn = 0
 prevDir = ''
 
-def clear():
-    os.system('cls')
-
 def start(): 
-    playerShip(5) 
-    playerShip(4)
+    playerShip(5)
+    clear() 
+    playerShip(4) 
+    clear() 
     playerShip(3)
+    clear() 
     playerShip(3)
+    clear() 
     playerShip(2)
-    
+    clear() 
     printBoard(Board)
     input('Press ENTER to continue')
     clear()
@@ -136,7 +120,7 @@ def playerShip(length):
     alphabet = 'abcdefghij'
     letterIndex = alphabet.index(place[0])
     if len(place) < 3:
-        print('Pick direction(R, L, U or D)')
+        print('Pick direction(r, l, u or d)')
         dir = input()
         if dir == 'r':
             endPlace = place[0] + str((int(place[1]) + length))
@@ -371,21 +355,18 @@ def enemyBoardDrawer():
 def playerTurn():
     global turn
     while turn == 0:
-        print(Back.RED + '-----ENEMY BOARD-----')
-        print(Style.RESET_ALL)
+        print('-----ENEMY BOARD-----')
         printBoard(enemyBoard)
         print('Guess a position:')
         playerGuess = input()
         if len(playerGuess) == 0:
             clear()
-            print(Back.RED + 'THATS NOT A POSITION...ITS NOT ANYTHING ACTUALLY')
-            print(Style.RESET_ALL)
+            print('THATS NOT A POSITION...ITS NOT ANYTHING ACTUALLY')
             playerTurn()
         clear()
         if playerGuess in enemyPlaces:
             if playerGuess in usedEnemyPlaces:
-                print(Back.GREEN + 'HIT!')
-                print(Style.RESET_ALL)
+                print('HIT!')
                 enemyBoard[playerGuess] = ('0')
                 usedEnemyPlaces.remove(playerGuess)
                 enemyPlaces.remove(playerGuess)
@@ -394,8 +375,7 @@ def playerTurn():
                 clear()
                 
             else:
-                print(Back.RED + 'MISS!')
-                print(Style.RESET_ALL)
+                print('MISS!')
                 enemyBoard[playerGuess] = ('x')
                 enemyPlaces.remove(playerGuess)
                 printBoard(enemyBoard)
@@ -405,29 +385,26 @@ def playerTurn():
                 
         else:
             clear()
-            print(Back.RED + 'YOU ALREDY GUESSED THAT POSITION')
-            print(Style.RESET_ALL)
+            print('YOU ALREDY GUESSED THAT POSITION')
             playerTurn()
             
         if len(usedEnemyPlaces) == 0:
-            print(Back.GREEN + 'YOU WON!')
-            print(Style.RESET_ALL)
-            input('Press ENTER to quit') 
+            print('YOU WON!')
+            input('Press ENTER to quit')
+            quit() 
 
 def enemyTurn():
     global turn
     global printBoard
     global prevDir
     while turn == 1:
-        print(Back.GREEN + '-----PLAYER BOARD-----')
-        print(Style.RESET_ALL)
+        print('-----PLAYER BOARD-----')
         printBoard(Board)
         input('Press ENTER to continue')
         clear()
         enemyGuess = random.choice(places)
         if enemyGuess in usedPlayerPlaces:
-            print(Back.RED + 'YOU\'VE BEEN HIT!')
-            print(Style.RESET_ALL)
+            print('YOU\'VE BEEN HIT!')
             Board[enemyGuess] = ('0')
             usedPlayerPlaces.remove(enemyGuess)
             places.remove(enemyGuess)
@@ -445,8 +422,7 @@ def enemyTurn():
                     secLetterIndex = letterIndex - 1
                     secEnemyGuess = alphabet[secLetterIndex] + enemyGuess[1]
                     if secEnemyGuess in usedPlayerPlaces:
-                        print(Back.RED + 'YOU\'VE BEEN HIT!')
-                        print(Style.RESET_ALL)
+                        print('YOU\'VE BEEN HIT!')
                         Board[secEnemyGuess] = ('0')
                         usedPlayerPlaces.remove(secEnemyGuess)
                         places.remove(secEnemyGuess)
@@ -458,8 +434,7 @@ def enemyTurn():
                     
                     
                     elif secEnemyGuess in places:
-                        print(Back.GREEN + 'THE ENEMY MISSED!')
-                        print(Style.RESET_ALL)
+                        print('THE ENEMY MISSED!')
                         Board[secEnemyGuess] = ('x')
                         places.remove(secEnemyGuess)
                         printBoard(Board)
@@ -480,8 +455,7 @@ def enemyTurn():
                     secLetterIndex = letterIndex + 1
                     secEnemyGuess = alphabet[secLetterIndex] + enemyGuess[1]
                     if secEnemyGuess in usedPlayerPlaces:
-                        print(Back.RED + 'YOU\'VE BEEN HIT!')
-                        print(Style.RESET_ALL)
+                        print('YOU\'VE BEEN HIT!')
                         Board[secEnemyGuess] = ('0')
                         usedPlayerPlaces.remove(secEnemyGuess)
                         places.remove(secEnemyGuess)
@@ -493,8 +467,7 @@ def enemyTurn():
                         
                     
                     elif secEnemyGuess in places:
-                        print(Back.GREEN + 'THE ENEMY MISSED!')
-                        print(Style.RESET_ALL)
+                        print('THE ENEMY MISSED!')
                         Board[secEnemyGuess] = ('x')
                         places.remove(secEnemyGuess)
                         printBoard(Board)
@@ -514,8 +487,7 @@ def enemyTurn():
                     prevDir = 'r'
                     secEnemyGuess = enemyGuess[0] + str(int(enemyGuess[1]) + 1)
                     if secEnemyGuess in usedPlayerPlaces:
-                        print(Back.RED + 'YOU\'VE BEEN HIT!')
-                        print(Style.RESET_ALL)
+                        print('YOU\'VE BEEN HIT!')
                         Board[secEnemyGuess] = ('0')
                         usedPlayerPlaces.remove(secEnemyGuess)
                         places.remove(secEnemyGuess)
@@ -527,8 +499,7 @@ def enemyTurn():
                         
                     
                     elif secEnemyGuess in places:
-                        print(Back.GREEN + 'THE ENEMY MISSED!')
-                        print(Style.RESET_ALL)
+                        print('THE ENEMY MISSED!')
                         Board[secEnemyGuess] = ('x')
                         places.remove(secEnemyGuess)
                         printBoard(Board)
@@ -549,8 +520,7 @@ def enemyTurn():
                     prevDir = 'l'
                     secEnemyGuess = enemyGuess[0] + str(int(enemyGuess[1]) - 1)
                     if secEnemyGuess in usedPlayerPlaces:
-                        print(Back.RED + 'YOU\'VE BEEN HIT!')
-                        print(Style.RESET_ALL)
+                        print('YOU\'VE BEEN HIT!')
                         Board[secEnemyGuess] = ('0')
                         usedPlayerPlaces.remove(secEnemyGuess)
                         places.remove(secEnemyGuess)
@@ -562,8 +532,7 @@ def enemyTurn():
                        
                     
                     elif secEnemyGuess in places:
-                        print(Back.GREEN + 'THE ENEMY MISSED!')
-                        print(Style.RESET_ALL)
+                        print('THE ENEMY MISSED!')
                         Board[secEnemyGuess] = ('x')
                         places.remove(secEnemyGuess)
                         printBoard(Board)
@@ -578,8 +547,7 @@ def enemyTurn():
                         prevDir = ''
                         break
         else:
-            print(Back.GREEN + 'THE ENEMY MISSED!')
-            print(Style.RESET_ALL)
+            print('THE ENEMY MISSED!')
             Board[enemyGuess] = ('x')
             places.remove(enemyGuess)
             printBoard(Board)
@@ -589,10 +557,9 @@ def enemyTurn():
             break
     
         if len(usedPlayerPlaces) == 0:
-            print(Back.RED + 'THE ENEMY WON!')
-            print(Style.RESET_ALL)
+            print('THE ENEMY WON!')
             input('Press ENTER to quit')
-             
+            quit() 
 start()
 enemyBoardDrawer()
 while len(usedPlayerPlaces) > 0 or len(usedEnemyPlaces) > 0:
