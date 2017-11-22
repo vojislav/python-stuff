@@ -51,6 +51,17 @@ enemyPlaces =  ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9',
                 'i0', 'i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9',
                 'j0', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'j9']
 
+allPlaces =   ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9',
+            'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9',
+            'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9',
+            'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9',
+            'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9',
+            'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9',
+            'g0', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+            'h0', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8', 'h9',
+            'i0', 'i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9',
+            'j0', 'j1', 'j2', 'j3', 'j4', 'j5', 'j6', 'j7', 'j8', 'j9']
+
 def printBoard(board):
     print('  0 1 2 3 4 5 6 7 8 9')
     
@@ -397,6 +408,7 @@ def enemyTurn():
     global turn
     global printBoard
     global prevDir
+    global allPlaces
     while turn == 1:
         print('-----PLAYER BOARD-----')
         printBoard(Board)
@@ -414,9 +426,39 @@ def enemyTurn():
             while turn == 1:
                 alphabet = 'abcdefghij'
                 letterIndex = alphabet.index(enemyGuess[0])
-                dirs = ['u', 'r', 'd', 'l']
-                if prevDir == '':
-                    randDir = random.choice(dirs)
+                dirs = []
+
+
+                ### UP
+                if letterIndex > 0:
+                    secLetterIndex = letterIndex - 1
+                    secEnemyGuess = alphabet[secLetterIndex] + enemyGuess[1]
+                    if secEnemyGuess in allPlaces:
+                        dirs.append('u')
+                
+
+                
+                ### DOWN
+                if letterIndex < 9:
+                    secLetterIndex = letterIndex + 1
+                    secEnemyGuess = alphabet[secLetterIndex] + enemyGuess[1]
+                    if secEnemyGuess in allPlaces:
+                        dirs.append('d')    
+
+
+                ### RIGHT
+                secEnemyGuess = enemyGuess[0] + str(int(enemyGuess[1]) + 1)
+                if secEnemyGuess in allPlaces:
+                    dirs.append('r')
+
+
+                ### LEFT
+                secEnemyGuess = enemyGuess[0] + str(int(enemyGuess[1]) - 1)
+                if secEnemyGuess in allPlaces:
+                    dirs.append('l')
+
+                randDir = random.choice(dirs)
+
                 if randDir == 'u':
                     prevDir = 'u'
                     secLetterIndex = letterIndex - 1
@@ -443,12 +485,7 @@ def enemyTurn():
                         input('Press ENTER to continue')
                         clear()
                         break
-                        
-                    else:
-                        turn = 0
-                        prevDir = ''
-                        break
-                        
+                                         
                         
                 elif randDir == 'd':
                     prevDir = 'd'
@@ -475,12 +512,8 @@ def enemyTurn():
                         prevDir = ''
                         input('Press ENTER to continue')
                         clear()
-                        break
-                        
-                    else:
-                        turn = 0
-                        prevDir = ''
-                        break
+                        break   
+              
                         
                     
                 elif randDir == 'r':
@@ -508,13 +541,7 @@ def enemyTurn():
                         input('Press ENTER to continue')
                         clear()
                         break
-                        
-                    
-                    else:
-                        turn = 0
-                        prevDir = ''
-                        break
-                        
+                       
                         
                 elif randDir == 'l':
                     prevDir = 'l'
@@ -541,11 +568,8 @@ def enemyTurn():
                         input('Press ENTER to continue')
                         clear()
                         break
+
                     
-                    else:
-                        turn = 0
-                        prevDir = ''
-                        break
         else:
             print('THE ENEMY MISSED!')
             Board[enemyGuess] = ('x')
@@ -555,11 +579,12 @@ def enemyTurn():
             input('Press ENTER to continue')
             clear()
             break
-    
-        if len(usedPlayerPlaces) == 0:
-            print('THE ENEMY WON!')
-            input('Press ENTER to quit')
-            quit() 
+
+    if len(usedPlayerPlaces) == 0:
+        print('THE ENEMY WON!')
+        input('Press ENTER to quit')
+        quit()
+     
 start()
 enemyBoardDrawer()
 while len(usedPlayerPlaces) > 0 or len(usedEnemyPlaces) > 0:
